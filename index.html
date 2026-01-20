@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<!-- Version 2 -->
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abin Antony | Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Modern Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        // Check for saved theme preference or system preference on load
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        heading: ['"Outfit"', 'sans-serif'],
+                    },
+                    colors: {
+                        background: '#f8fafc',  // Slate-50 (Light)
+                        surface: '#ffffff',     // White
+                        primary: '#4f46e5',     // Indigo-600 (Darker for contrast)
+                        secondary: '#9333ea',   // Purple-600
+                        accent: '#06b6d4',      // Cyan-500
+                        dark: '#0f172a',        // Slate-900 (for text)
+                        'dark-bg': '#020617',   // Slate-950 (Dark mode bg)
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        /* Fix anchor scrolling so nav doesn't cover headings */
+        html {
+            scroll-padding-top: 100px;
+        }
+        
+        /* Modern Glassmorphism - Light Mode */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        /* Dark Mode Overrides for Glassmorphism */
+        .dark .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+        
+        .dark .glass-nav {
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Project Card specific glass override for dark overlays */
+        .project-glass {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Text Gradients */
+        .text-gradient {
+            background: linear-gradient(to right, #4f46e5, #9333ea, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .dark .text-gradient {
+            background: linear-gradient(to right, #818cf8, #c084fc, #22d3ee);
+            -webkit-background-clip: text;
+            background-clip: text;
+        }
+
+        /* Smooth reveal for sections */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hero specific animation to prevent blank screen on load */
+        .hero-animate {
+            animation: heroFadeIn 1s cubic-bezier(0.5, 0, 0, 1) forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes heroFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Ensure content is visible if user prefers reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            .hero-animate {
+                opacity: 1;
+                animation: none;
+                transform: none;
+            }
+        }
+        
+        /* 3D Flip Card Styles */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="bg-background dark:bg-dark-bg text-slate-600 dark:text-slate-300 font-sans selection:bg-primary selection:text-white overflow-x-hidden transition-colors duration-300">
+
+    <!-- Ambient Background Animation -->
+    <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 dark:bg-primary/20 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[100px] opacity-70 animate-blob"></div>
+        <div class="absolute top-0 right-1/4 w-96 h-96 bg-secondary/10 dark:bg-secondary/20 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[100px] opacity-70 animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-32 left-1/3 w-96 h-96 bg-accent/10 dark:bg-accent/20 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[100px] opacity-70 animate-blob animation-delay-4000"></div>
+    </div>
+
+    <!-- Floating Navigation -->
+    <nav class="fixed top-6 left-1/2 -translate-x-1/2 w-[95%] md:w-[90%] max-w-4xl z-50 glass-nav rounded-full px-6 py-4 transition-all duration-300" id="navbar">
+        <div class="flex items-center justify-between">
+            <div class="flex-shrink-0 cursor-pointer" onclick="window.scrollTo(0,0)">
+                <!-- Updated Logo -->
+                <span class="text-xl font-bold font-heading text-slate-900 dark:text-white tracking-tight transition-colors">console<span class="text-primary dark:text-indigo-400">tree</span></span>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="#home" class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-white hover:bg-white/50 dark:hover:bg-white/10 rounded-full transition-all">Home</a>
+                    <a href="#about" class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-white hover:bg-white/50 dark:hover:bg-white/10 rounded-full transition-all">About</a>
+                    <a href="#projects" class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-white hover:bg-white/50 dark:hover:bg-white/10 rounded-full transition-all">Projects</a>
+                    <a href="#contact" class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-white hover:bg-white/50 dark:hover:bg-white/10 rounded-full transition-all">Contact</a>
+                </div>
+
+                <!-- Theme Toggle Button -->
+                <!-- Fixed width/height (w-10 h-10) to prevent layout shift when toggling icons -->
+                <button onclick="toggleTheme()" class="w-10 h-10 flex items-center justify-center rounded-full text-slate-600 dark:text-yellow-400 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors focus:outline-none" aria-label="Toggle Dark Mode">
+                    <i class="fas fa-moon dark:hidden text-lg"></i>
+                    <i class="fas fa-sun hidden dark:block text-lg"></i>
+                </button>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button type="button" onclick="toggleMobileMenu()" class="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white focus:outline-none p-2">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div class="md:hidden hidden absolute top-full left-0 w-full mt-2 glass-panel rounded-2xl p-4 flex flex-col space-y-2 shadow-xl" id="mobile-menu">
+            <a href="#home" onclick="toggleMobileMenu()" class="block px-4 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-black/5 dark:hover:bg-white/10 rounded-lg">Home</a>
+            <a href="#about" onclick="toggleMobileMenu()" class="block px-4 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-black/5 dark:hover:bg-white/10 rounded-lg">About</a>
+            <a href="#projects" onclick="toggleMobileMenu()" class="block px-4 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-black/5 dark:hover:bg-white/10 rounded-lg">Projects</a>
+            <a href="#contact" onclick="toggleMobileMenu()" class="block px-4 py-2 text-sm text-primary dark:text-indigo-400 font-semibold hover:bg-black/5 dark:hover:bg-white/10 rounded-lg">Contact Me</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center relative pt-24 md:pt-32 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="hero-animate flex flex-col items-center">
+                <!-- Updated Badge to match Glassmorphism theme and dark mode -->
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-white/50 dark:border-white/10 bg-white/30 dark:bg-white/5 text-xs font-medium text-slate-700 dark:text-slate-300 mb-8 shadow-sm backdrop-blur-md">
+                    <span class="relative flex h-2 w-2">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
+                    </span>
+                    Available for Work
+                </div>
+                
+                <h1 class="text-5xl md:text-8xl font-heading font-bold text-slate-900 dark:text-white mb-6 tracking-tight leading-[1.1] transition-colors">
+                    Crafting digital <br>
+                    <span class="text-gradient">masterpieces.</span>
+                </h1>
+                
+                <p class="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-slate-500 dark:text-slate-400 mb-10 leading-relaxed font-light transition-colors">
+                    I'm a creative developer who bridges the gap between design and engineering. I build accessible, pixel-perfect, and performant web experiences.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 items-center">
+                    <a href="#projects" class="group relative px-8 py-3.5 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-semibold text-sm transition-transform hover:scale-105 active:scale-95 shadow-xl shadow-slate-900/20 dark:shadow-white/10">
+                        <span class="relative z-10">View Projects</span>
+                        <div class="absolute inset-0 rounded-full bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-20 transition-opacity blur-md"></div>
+                    </a>
+                    <a href="#contact" class="px-8 py-3.5 rounded-full glass-panel text-slate-900 dark:text-white font-medium text-sm hover:bg-white dark:hover:bg-white/10 transition-colors border border-slate-200 dark:border-white/10">
+                        Contact Me
+                    </a>
+                </div>
+
+                <!-- Tech Stack Strip -->
+                <div class="mt-20 pt-10 border-t border-slate-200 dark:border-white/10 w-full max-w-4xl transition-colors">
+                    <p class="text-sm text-slate-400 dark:text-slate-500 mb-6 font-medium uppercase tracking-wider">Favorite Stack</p>
+                    <!-- Removed hover:opacity-100 and transitions to make it static -->
+                    <div class="flex flex-wrap justify-center items-center gap-8 md:gap-12 opacity-60 grayscale">
+                        <!-- React -->
+                        <i class="fab fa-react text-3xl text-cyan-400" title="React"></i>
+                        
+                        <!-- JavaScript -->
+                        <i class="fab fa-js text-3xl text-yellow-400" title="JavaScript"></i>
+
+                        <!-- HTML -->
+                        <i class="fab fa-html5 text-3xl text-yellow-400" title="HTML"></i>
+
+                        <!-- CSS3 -->
+                        <i class="fab fa-css3-alt text-3xl text-blue-500" title="CSS3"></i>
+
+                        <!-- Node.js -->
+                        <i class="fab fa-node text-3xl text-green-500" title="Node.js"></i>
+
+                        <!-- Figma -->
+                        <i class="fab fa-figma text-3xl text-pink-500" title="Figma"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 md:py-24 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <!-- Image/Card Area -->
+                <div class="relative reveal">
+                    <div class="absolute -inset-4 bg-gradient-to-r from-primary via-secondary to-accent rounded-[2rem] blur-2xl opacity-20"></div>
+                    <!-- Reduced width from max-w-md to max-w-sm for a smaller footprint -->
+                    <div class="relative glass-panel rounded-[2rem] p-6 border border-white/50 dark:border-white/10 bg-white/40 dark:bg-white/5 max-w-sm mx-auto w-full">
+                        <div class="aspect-[4/5] rounded-2xl overflow-hidden relative shadow-lg">
+                            <!-- Updated Image: Geometric Abstract Dark Theme -->
+                            <img 
+                                src="https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?q=80&w=1000&auto=format&fit=crop" 
+                                alt="3D Geometric Abstract Art" 
+                                class="w-full h-full object-cover"
+                            >
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Content Area -->
+                <div class="reveal">
+                    <h2 class="text-4xl md:text-5xl font-heading font-bold text-slate-900 dark:text-white mb-8 transition-colors">
+                        Driven by Design, <br>
+                        <span class="text-gradient">Powered by Code.</span>
+                    </h2>
+                    <div class="space-y-6 text-lg text-slate-600 dark:text-slate-300 font-light leading-relaxed transition-colors">
+                        <p>
+                            I'm a Full-Stack Developer based in Toronto with a passion for building comprehensive digital solutions. From the first pixel of design to the final database query, I love the entire process of bringing ideas to life.
+                        </p>
+                        <p>
+                            My focus is on creating scalable, user-friendly applications using modern web architecture. Whether it's crafting intuitive front-end interfaces or engineering robust back-end systems, I ensure every piece of the puzzle fits perfectly.
+                        </p>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="grid grid-cols-2 gap-6 mt-12 border-t border-slate-200 dark:border-white/10 pt-8 transition-colors">
+                        <div>
+                            <h3 class="text-3xl font-bold text-slate-900 dark:text-white font-heading">3+</h3>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Years of Exp.</p>
+                        </div>
+                        <div>
+                            <h3 class="text-3xl font-bold text-slate-900 dark:text-white font-heading">7+</h3>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Projects Completed</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bento Grid Projects -->
+    <section id="projects" class="py-20 md:py-24 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6 reveal">
+                <div>
+                    <h2 class="text-4xl font-heading font-bold text-slate-900 dark:text-white mb-4 transition-colors">Projects</h2>
+                    <p class="text-slate-500 dark:text-slate-400 text-lg transition-colors">A glimpse into my digital playground.</p>
+                </div>
+                <a target="_blank" rel="noopener noreferrer" href="https://github.com/consoletree?tab=repositories" class="group flex items-center gap-2 text-primary dark:text-indigo-400 border-b border-primary/30 dark:border-indigo-400/30 pb-1 hover:border-primary dark:hover:border-indigo-400 transition-all">
+                    View GitHub
+                    <i class="fas fa-arrow-right text-sm transform group-hover:translate-x-1 transition-transform"></i>
+                </a>
+            </div>
+
+            <!-- Bento Grid Layout -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[300px]">
+                
+                <!-- Large Feature Item -->
+                <a href="https://github.com/consoletree/neon-marketplace" target="_blank" rel="noopener noreferrer" class="lg:col-span-2 group relative rounded-3xl overflow-hidden glass-panel border border-white/50 dark:border-white/10 hover:border-primary/50 dark:hover:border-indigo-500/50 transition-all duration-500 reveal shadow-sm hover:shadow-xl block">
+                    <!-- Status Badge: In Progress -->
+                    <div class="absolute top-5 right-5 z-30 flex items-center gap-2 px-3 py-1 rounded-full bg-black/20 backdrop-blur-md border border-white/20 text-xs font-medium text-white shadow-sm">
+                        <span class="relative flex h-2 w-2">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-400"></span>
+                        </span>
+                        In Progress
+                    </div>
+                    <!-- Image Background - Removed zoom effect -->
+                    <div class="absolute inset-0">
+                        <img 
+                            src="https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=1600&auto=format&fit=crop" 
+                            alt="Neon Marketplace Interface" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <!-- Increased opacity for better text readability -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-slate-900/60 to-transparent z-10 pointer-events-none"></div>
+                    
+                    <div class="absolute bottom-0 left-0 p-8 z-20 w-full">
+                        <div class="flex justify-between items-end">
+                            <div>
+                                <div class="flex gap-2 mb-3">
+                                    <span class="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-medium text-white border border-white/20">E-Commerce</span>
+                                    <span class="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-medium text-white border border-white/20">React</span>
+                                </div>
+                                <h3 class="text-3xl font-heading font-bold text-white mb-2 drop-shadow-md">Neon Marketplace</h3>
+                                <p class="text-slate-100 max-w-lg line-clamp-2 drop-shadow-sm font-medium">A futuristic shopping platform with 3D product previews and real-time inventory tracking built with Next.js and WebGL.</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Tall Feature Item -->
+                <a href="https://github.com/consoletree/hexie" target="_blank" rel="noopener noreferrer" class="group relative rounded-3xl overflow-hidden glass-panel border border-white/50 dark:border-white/10 hover:border-secondary/50 dark:hover:border-purple-500/50 transition-all duration-500 reveal delay-100 shadow-sm hover:shadow-xl block">
+                    <!-- Image Background - Removed zoom effect -->
+                    <div class="absolute inset-0">
+                        <img 
+                            src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1000&auto=format&fit=crop" 
+                            alt="Abstract Colorful Gradient" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <!-- Increased opacity -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-slate-900/60 to-transparent z-10 pointer-events-none"></div>
+                    
+                    <div class="absolute bottom-0 left-0 p-8 z-20">
+                        <div class="flex gap-2 mb-3">
+                            <span class="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-medium text-white border border-white/20">Bash</span>
+                        </div>
+                        <h3 class="text-2xl font-heading font-bold text-white mb-2 drop-shadow-md">Hexie</h3>
+                        <p class="text-slate-100 text-sm drop-shadow-sm font-medium">Color Selection in your fingertips.</p>
+                    </div>
+                </a>
+
+                <!-- Regular Item -->
+                <a href="https://github.com/consoletree/sysconfigs" target="_blank" rel="noopener noreferrer" class="group relative rounded-3xl overflow-hidden glass-panel border border-white/50 dark:border-white/10 hover:border-accent/50 dark:hover:border-cyan-500/50 transition-all duration-500 reveal shadow-sm hover:shadow-xl block">
+                     <!-- Image Background - Removed zoom effect -->
+                     <div class="absolute inset-0">
+                        <img 
+                            src="https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?q=80&w=1000&auto=format&fit=crop" 
+                            alt="Dark Server Room and Code" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <!-- Increased opacity -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-slate-900/60 to-transparent z-10 pointer-events-none"></div>
+                    
+                    <div class="absolute bottom-0 left-0 p-8 z-20">
+                        <div class="flex gap-2 mb-3">
+                            <span class="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-medium text-white border border-white/20">Bash</span>
+                            <span class="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-medium text-white border border-white/20">Linux</span>
+                        </div>
+                        <h3 class="text-2xl font-heading font-bold text-white mb-2 drop-shadow-md">sysconfigs</h3>
+                        <p class="text-slate-100 text-sm drop-shadow-sm font-medium">Arch Linux setup automation script</p>
+                    </div>
+                </a>
+
+                <!-- Regular Item (Spans 2 columns) -->
+                <a href="https://github.com/consoletree/space-odyssey" target="_blank" rel="noopener noreferrer" class="lg:col-span-2 group relative rounded-3xl overflow-hidden glass-panel border border-white/50 dark:border-white/10 hover:border-purple-500/50 dark:hover:border-purple-500/50 transition-all duration-500 reveal delay-100 shadow-sm hover:shadow-xl block">
+                    <!-- Status Badge: In Progress -->
+                    <div class="absolute top-5 right-5 z-30 flex items-center gap-2 px-3 py-1 rounded-full bg-black/20 backdrop-blur-md border border-white/20 text-xs font-medium text-white shadow-sm">
+                        <span class="relative flex h-2 w-2">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-400"></span>
+                        </span>
+                        In Progress
+                    </div>                    
+                     <!-- Image Background - Removed zoom effect -->
+                     <div class="absolute inset-0">
+                        <img 
+                            src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1600&auto=format&fit=crop" 
+                            alt="Space and Planet" 
+                            class="w-full h-full object-cover"
+                        >
+                    </div>
+                    <!-- Increased opacity -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-slate-900/60 to-transparent z-10 pointer-events-none"></div>
+                    
+                    <div class="absolute bottom-0 left-0 p-8 z-20">
+                        <div class="flex gap-2 mb-3">
+                            <span class="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-medium text-white border border-white/20">WebGL</span>
+                             <span class="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-medium text-white border border-white/20">Three.js</span>
+                        </div>
+                        <h3 class="text-3xl font-heading font-bold text-white mb-2 drop-shadow-md">Space Odyssey 3D</h3>
+                        <p class="text-slate-100 max-w-lg drop-shadow-sm font-medium">An immersive browser-based game exploring the solar system.</p>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Hobbies / Personal Section -->
+    <section id="personal" class="py-20 md:py-24 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl md:text-4xl font-heading font-bold text-slate-900 dark:text-white mb-4 transition-colors">
+                    Don't forget I am <span class="text-gradient">a human too</span>
+                </h2>
+                <p class="text-slate-500 dark:text-slate-400 text-lg transition-colors">Click the cards to see what keeps me busy.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 reveal">
+                
+                <!-- Hobby 1: French -->
+                <div class="perspective-1000 h-[320px] cursor-pointer group" onclick="toggleFlip(this)">
+                    <div class="flip-card-inner relative w-full h-full transition-transform duration-700 transform-style-3d">
+                        
+                        <!-- Front Face -->
+                        <div class="absolute inset-0 backface-hidden glass-panel p-8 rounded-2xl border border-white/50 dark:border-white/10 text-center bg-white/40 dark:bg-white/5 shadow-sm hover:shadow-lg flex flex-col justify-center items-center">
+                            <div class="w-16 h-16 mx-auto bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center text-blue-600 dark:text-blue-400 text-2xl mb-6">
+                                <i class="fas fa-language"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Language Enthusiast</h3>
+                            <p class="text-slate-500 dark:text-slate-400">Currently at <span class="font-semibold text-slate-700 dark:text-slate-200">French B1</span> level.</p>
+                            <p class="text-xs text-primary dark:text-indigo-400 mt-4 font-medium uppercase tracking-wider">Tap to Flip <i class="fas fa-sync ml-1"></i></p>
+                        </div>
+
+                        <!-- Back Face -->
+                        <div class="absolute inset-0 backface-hidden rotate-y-180 glass-panel p-8 rounded-2xl border border-white/50 dark:border-white/10 text-center bg-white/90 dark:bg-slate-800 shadow-sm flex flex-col justify-center items-center">
+                            <div class="w-12 h-12 mx-auto bg-blue-50 dark:bg-blue-900/20 rounded-full flex items-center justify-center text-blue-500 dark:text-blue-400 text-lg mb-4">
+                                <i class="fas fa-quote-left"></i>
+                            </div>
+                            <p class="text-slate-600 dark:text-slate-300 italic mb-4">"Petit à petit, l'oiseau fait son nid."</p>
+                            <p class="text-sm text-slate-500 dark:text-slate-400">I practice daily on Duolingo and love watching French cinema to improve my listening skills.</p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Hobby 2: Trading -->
+                <div class="perspective-1000 h-[320px] cursor-pointer group" onclick="toggleFlip(this)">
+                    <div class="flip-card-inner relative w-full h-full transition-transform duration-700 transform-style-3d">
+                        
+                        <!-- Front Face -->
+                        <div class="absolute inset-0 backface-hidden glass-panel p-8 rounded-2xl border border-white/50 dark:border-white/10 text-center bg-white/40 dark:bg-white/5 shadow-sm hover:shadow-lg flex flex-col justify-center items-center">
+                            <div class="w-16 h-16 mx-auto bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-green-600 dark:text-green-400 text-2xl mb-6">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Market Trading</h3>
+                            <p class="text-slate-500 dark:text-slate-400">Fascinated by the financial ecosystem.</p>
+                            <p class="text-xs text-primary dark:text-indigo-400 mt-4 font-medium uppercase tracking-wider">Tap to Flip <i class="fas fa-sync ml-1"></i></p>
+                        </div>
+
+                        <!-- Back Face -->
+                        <div class="absolute inset-0 backface-hidden rotate-y-180 glass-panel p-8 rounded-2xl border border-white/50 dark:border-white/10 text-center bg-white/90 dark:bg-slate-800 shadow-sm flex flex-col justify-center items-center">
+                            <h4 class="text-green-600 dark:text-green-400 font-bold mb-2">My Strategy</h4>
+                            <p class="text-slate-600 dark:text-slate-300 text-sm mb-4">I focus on technical analysis for Stocks and ETFs. Risk management is my #1 rule.</p>
+                            <div class="flex gap-2 justify-center">
+                                <span class="px-2 py-1 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 text-xs rounded-md">S&P 500</span>
+                                <span class="px-2 py-1 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 text-xs rounded-md">Crypto</span>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <!-- Hobby 3: Travelling -->
+                <div class="perspective-1000 h-[320px] cursor-pointer group" onclick="toggleFlip(this)">
+                    <div class="flip-card-inner relative w-full h-full transition-transform duration-700 transform-style-3d">
+                        
+                        <!-- Front Face -->
+                        <div class="absolute inset-0 backface-hidden glass-panel p-8 rounded-2xl border border-white/50 dark:border-white/10 text-center bg-white/40 dark:bg-white/5 shadow-sm hover:shadow-lg flex flex-col justify-center items-center">
+                            <div class="w-16 h-16 mx-auto bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center text-purple-600 dark:text-purple-400 text-2xl mb-6">
+                                <i class="fas fa-plane-departure"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Travelling</h3>
+                            <p class="text-slate-500 dark:text-slate-400">Always planning the next adventure.</p>
+                            <p class="text-xs text-primary dark:text-indigo-400 mt-4 font-medium uppercase tracking-wider">Tap to Flip <i class="fas fa-sync ml-1"></i></p>
+                        </div>
+
+                        <!-- Back Face -->
+                        <div class="absolute inset-0 backface-hidden rotate-y-180 glass-panel p-8 rounded-2xl border border-white/50 dark:border-white/10 text-center bg-white/90 dark:bg-slate-800 shadow-sm flex flex-col justify-center items-center">
+                            <h4 class="text-purple-600 dark:text-purple-400 font-bold mb-2">Travel Stats</h4>
+                            <ul class="text-slate-600 dark:text-slate-300 text-sm space-y-2 mb-4 text-left w-full px-4">
+                                <li class="flex justify-between"><span>Countries:</span> <span class="font-bold">5</span></li>
+                                <li class="flex justify-between"><span>Favorite:</span> <span class="font-bold">Japan 🇯🇵</span></li>
+                                <li class="flex justify-between"><span>Next Stop:</span> <span class="font-bold">Kōfu 🏔️</span></li>
+                            </ul>
+                        </div>
+                        
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Modern Contact Section -->
+    <section id="contact" class="py-20 md:py-24 relative z-10">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-panel rounded-[3rem] p-8 md:p-16 border border-white/50 dark:border-white/10 text-center relative overflow-hidden reveal shadow-xl bg-white/60 dark:bg-white/5">
+                <!-- Decorative Glows inside card -->
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-primary/20 rounded-full blur-[80px] -translate-y-1/2"></div>
+                
+                <div class="relative z-10">
+                    <h2 class="text-4xl md:text-6xl font-heading font-bold text-slate-900 dark:text-white mb-6 transition-colors">Let's work together.</h2>
+                    <p class="text-xl text-slate-500 dark:text-slate-400 mb-12 max-w-2xl mx-auto transition-colors">Creating meaningful experiences is my passion. Reach out if you want to create something memorable.</p>
+                    
+                    <div class="flex flex-col md:flex-row gap-8 justify-center items-center">
+                        <!-- Click to Reveal Email Button -->
+                        <button onclick="revealEmail(this)" class="group relative inline-flex items-center gap-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-8 py-4 rounded-full text-lg font-bold transition-transform hover:scale-105 shadow-lg shadow-slate-900/30 dark:shadow-white/20">
+                            <i class="fas fa-envelope"></i>
+                            <span id="email-text">Reveal Email</span>
+                            <div class="absolute inset-0 rounded-full bg-white/20 dark:bg-black/10 animate-pulse opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        </button>
+
+                        <div class="flex gap-6">
+                            <!-- Updated Social Icons: Removed hover:-translate-y-1, added hover:scale-110 and duration-300 for smoother effect -->
+                            <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/itsaebin" class="w-14 h-14 rounded-full glass-panel border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-600 dark:text-slate-300 text-xl hover:bg-white dark:hover:bg-white/10 hover:text-primary dark:hover:text-white hover:border-primary/30 transition-all duration-300 hover:scale-110 shadow-sm">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a target="_blank" rel="noopener noreferrer" href="https://www.github.com/consoletree" class="w-14 h-14 rounded-full glass-panel border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-600 dark:text-slate-300 text-xl hover:bg-white dark:hover:bg-white/10 hover:text-primary dark:hover:text-white hover:border-primary/30 transition-all duration-300 hover:scale-110 shadow-sm">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-16 flex flex-col md:flex-row justify-center items-center text-sm text-slate-400 dark:text-slate-500 transition-colors">
+                <p>&copy; 2026 consoletree. Built with passion & code.</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Theme Toggle Function
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Scroll Reveal Animation
+        const revealElements = document.querySelectorAll('.reveal');
+
+        const revealOnScroll = () => {
+            const windowHeight = window.innerHeight;
+            const elementVisible = 150;
+
+            revealElements.forEach((reveal) => {
+                const elementTop = reveal.getBoundingClientRect().top;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveal.classList.add('active');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', revealOnScroll);
+        // Trigger once on load
+        revealOnScroll();
+
+        // Navbar Float Effect on Scroll (Updated for Dark Mode)
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                // Add opaque background based on theme (handled by CSS glass-nav class mostly, but can enhance here)
+                nav.classList.add('shadow-md');
+                if (document.documentElement.classList.contains('dark')) {
+                     nav.style.backgroundColor = 'rgba(15, 23, 42, 0.9)'; // Darker opaque
+                } else {
+                     nav.style.backgroundColor = 'rgba(255, 255, 255, 0.9)'; // White opaque
+                }
+            } else {
+                nav.classList.remove('shadow-md');
+                nav.style.backgroundColor = ''; // Revert to glass-nav CSS
+            }
+        });
+        
+        // Listen for theme changes to update navbar instantly if scrolled
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === "class" && window.scrollY > 50) {
+                    const nav = document.getElementById('navbar');
+                    if (document.documentElement.classList.contains('dark')) {
+                         nav.style.backgroundColor = 'rgba(15, 23, 42, 0.9)';
+                    } else {
+                         nav.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+                    }
+                }
+            });
+        });
+        observer.observe(document.documentElement, { attributes: true });
+
+        // Toggle Flip Card
+        function toggleFlip(card) {
+            const inner = card.querySelector('.flip-card-inner');
+            inner.classList.toggle('rotate-y-180');
+        }
+
+        // Email Reveal Function
+        function revealEmail(btn) {
+            const email = "abinrantony@icloud.com";
+            const span = document.getElementById('email-text');
+            
+            // Change text
+            span.innerText = email;
+            
+            // Remove the reveal onclick handler and make it a functional mailto link
+            btn.onclick = null;
+            btn.addEventListener('click', () => {
+                window.location.href = "mailto:" + email;
+            });
+            
+            // Optional: visual feedback that it's now active
+            btn.classList.add('ring-2', 'ring-offset-2', 'ring-primary');
+        }
+    </script>
+</body>
+</html>
+

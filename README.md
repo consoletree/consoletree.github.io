@@ -7,7 +7,7 @@
 
 Welcome to the repository for my personal portfolio. This is a full-stack project built using the **MERN Stack** (MongoDB, Express, React, Node.js).
 
-🔗 **Live Demo (Frontend):** [https://consoletree.github.io](https://consoletree.github.io)
+🔗 **Live Demo:** [https://consoletree.github.io](https://consoletree.github.io)
 
 ---
 

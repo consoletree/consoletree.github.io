@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Add your custom scrollbar and glass styles from the HTML here */
+@layer components {
+    .glass-panel {
+        @apply bg-white/70 backdrop-blur-md border border-black/5 shadow-sm transition-colors;
+    }
+    .dark .glass-panel {
+        @apply bg-slate-900/60 border-white/10 shadow-md;
+    }
+    .glass-nav {
+        @apply bg-white/70 backdrop-blur-xl border border-white/50 shadow-sm transition-all;
+    }
+    .dark .glass-nav {
+        @apply bg-slate-900/70 border-white/10;
+    }
+    .text-gradient {
+        @apply bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-500 bg-clip-text text-transparent;
+    }
+    .dark .text-gradient {
+        @apply from-indigo-400 via-purple-400 to-cyan-400;
+    }
+}

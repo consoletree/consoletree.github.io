@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<!-- Version 2 -->
+<!-- Version 12: System Theme Preference Support -->
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abin Antony | Portfolio</title>
+    <title>Console Tree | Technical Client Success</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Modern Fonts -->
+    <!-- Fonts: Inter for UI, Space Grotesk for Headings -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <script>
         // Check for saved theme preference or system preference on load
@@ -20,38 +20,51 @@
             document.documentElement.classList.remove('dark')
         }
 
+        // Listen for system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (!('theme' in localStorage)) {
+                if (event.matches) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            }
+        });
+
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-                        heading: ['"Outfit"', 'sans-serif'],
+                        sans: ['"Inter"', 'sans-serif'],
+                        display: ['"Space Grotesk"', 'sans-serif'],
                     },
                     colors: {
-                        background: '#f8fafc',  // Slate-50 (Light)
-                        surface: '#ffffff',     // White
-                        primary: '#4f46e5',     // Indigo-600 (Darker for contrast)
-                        secondary: '#9333ea',   // Purple-600
-                        accent: '#06b6d4',      // Cyan-500
-                        dark: '#0f172a',        // Slate-900 (for text)
-                        'dark-bg': '#020617',   // Slate-950 (Dark mode bg)
+                        bg: {
+                            light: '#ffffff',
+                            dark: '#0a0a0a', 
+                        },
+                        card: {
+                            light: '#f4f4f5', // Zinc-100
+                            dark: '#171717', // Zinc-900
+                        },
+                        accent: {
+                            DEFAULT: '#6366f1', // Indigo 500
+                            glow: '#818cf8',
+                        }
                     },
                     animation: {
-                        'blob': 'blob 7s infinite',
-                        'float': 'float 6s ease-in-out infinite',
-                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'fade-in': 'fadeIn 1s ease-out forwards',
+                        'slide-up': 'slideUp 0.8s ease-out forwards',
                     },
                     keyframes: {
-                        blob: {
-                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
                         },
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-20px)' },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
                         }
                     }
                 }
@@ -59,562 +72,331 @@
         }
     </script>
     <style>
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-        .dark ::-webkit-scrollbar-track {
-            background: #0f172a;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-        .dark ::-webkit-scrollbar-thumb {
-            background: #334155;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
+        body { -webkit-font-smoothing: antialiased; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #52525b; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #71717a; }
+
+        .bg-grid-pattern {
+            background-image: radial-gradient(rgba(100, 100, 100, 0.2) 1px, transparent 1px);
+            background-size: 40px 40px;
         }
         
-        /* Fix anchor scrolling so nav doesn't cover headings */
-        html {
-            scroll-padding-top: 100px;
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
-        
-        /* Modern Glassmorphism - Light Mode */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            transition: background-color 0.3s, border-color 0.3s;
+        .light .glass {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(0, 0, 0, 0.1);
         }
 
-        .glass-nav {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
-            transition: background-color 0.3s, border-color 0.3s;
+        .hover-card {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
-
-        /* Dark Mode Overrides for Glassmorphism */
-        .dark .glass-panel {
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-        }
-        
-        .dark .glass-nav {
-            background: rgba(15, 23, 42, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        /* Project Card specific glass override for dark overlays */
-        .project-glass {
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* Text Gradients */
-        .text-gradient {
-            background: linear-gradient(to right, #4f46e5, #9333ea, #06b6d4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .dark .text-gradient {
-            background: linear-gradient(to right, #818cf8, #c084fc, #22d3ee);
-            -webkit-background-clip: text;
-            background-clip: text;
-        }
-
-        /* Smooth reveal for sections */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Hero specific animation to prevent blank screen on load */
-        .hero-animate {
-            animation: heroFadeIn 1s cubic-bezier(0.5, 0, 0, 1) forwards;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        @keyframes heroFadeIn {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Ensure content is visible if user prefers reduced motion */
-        @media (prefers-reduced-motion: reduce) {
-            .hero-animate {
-                opacity: 1;
-                animation: none;
-                transform: none;
-            }
-        }
-        
-        /* 3D Flip Card Styles */
-        .perspective-1000 {
-            perspective: 1000px;
-        }
-        .transform-style-3d {
-            transform-style: preserve-3d;
-        }
-        .backface-hidden {
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-        }
-        .rotate-y-180 {
-            transform: rotateY(180deg);
+        .hover-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.2);
+            border-color: rgba(99, 102, 241, 0.5);
         }
     </style>
 </head>
-<body class="bg-background dark:bg-dark-bg text-slate-600 dark:text-slate-300 font-sans selection:bg-primary selection:text-white overflow-x-hidden transition-colors duration-300">
+<body class="bg-white dark:bg-bg-dark text-zinc-900 dark:text-zinc-300 transition-colors duration-300 relative">
 
-    <!-- Ambient Background Animation -->
-    <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        <div class="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 dark:bg-primary/20 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[100px] opacity-70 animate-blob"></div>
-        <div class="absolute top-0 right-1/4 w-96 h-96 bg-secondary/10 dark:bg-secondary/20 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[100px] opacity-70 animate-blob animation-delay-2000"></div>
-        <div class="absolute -bottom-32 left-1/3 w-96 h-96 bg-accent/10 dark:bg-accent/20 rounded-full mix-blend-multiply dark:mix-blend-screen filter blur-[100px] opacity-70 animate-blob animation-delay-4000"></div>
-    </div>
+    <!-- Background Grid -->
+    <div class="fixed inset-0 z-0 bg-grid-pattern pointer-events-none mask-image-gradient"></div>
 
-    <!-- Floating Navigation -->
-    <nav class="fixed top-6 left-1/2 -translate-x-1/2 w-[95%] md:w-[90%] max-w-4xl z-50 glass-nav rounded-full px-6 py-4 transition-all duration-300" id="navbar">
-        <div class="flex items-center justify-between">
-            <div class="flex-shrink-0 cursor-pointer" onclick="window.scrollTo(0,0)">
-                <!-- Updated Logo -->
-                <span class="text-xl font-bold font-heading text-slate-900 dark:text-white tracking-tight transition-colors">console<span class="text-primary dark:text-indigo-400">tree</span></span>
-            </div>
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-50 glass border-b border-zinc-200 dark:border-zinc-800/50">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="#" class="text-xl font-display font-bold tracking-tighter text-black dark:text-white">
+                console<span class="text-indigo-600 dark:text-indigo-500">tree</span>
+            </a>
             
-            <div class="flex items-center gap-4">
-                <!-- Desktop Menu -->
-                <div class="hidden md:flex items-center space-x-1">
-                    <a href="#home" class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-white hover:bg-white/50 dark:hover:bg-white/10 rounded-full transition-all">Home</a>
-                    <a href="#about" class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-white hover:bg-white/50 dark:hover:bg-white/10 rounded-full transition-all">About</a>
-                    <a href="#projects" class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-white hover:bg-white/50 dark:hover:bg-white/10 rounded-full transition-all">Projects</a>
-                    <a href="#contact" class="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-white hover:bg-white/50 dark:hover:bg-white/10 rounded-full transition-all">Contact</a>
+            <div class="flex items-center gap-6">
+                <div class="hidden md:flex items-center gap-6 text-sm font-medium">
+                    <a href="#about" class="text-zinc-700 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-white transition-colors">About</a>
+                    <a href="#experience" class="text-zinc-700 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-white transition-colors">Experience</a>
+                    <a href="#skills" class="text-zinc-700 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-white transition-colors">Competencies</a>
+                    <a href="#projects" class="text-zinc-700 dark:text-zinc-300 hover:text-indigo-600 dark:hover:text-white transition-colors">Portfolio</a>
                 </div>
-
-                <!-- Theme Toggle Button -->
-                <!-- Fixed width/height (w-10 h-10) to prevent layout shift when toggling icons -->
-                <button onclick="toggleTheme()" class="w-10 h-10 flex items-center justify-center rounded-full text-slate-600 dark:text-yellow-400 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors focus:outline-none" aria-label="Toggle Dark Mode">
-                    <i class="fas fa-moon dark:hidden text-lg"></i>
-                    <i class="fas fa-sun hidden dark:block text-lg"></i>
+                <button onclick="toggleTheme()" class="w-8 h-8 flex items-center justify-center rounded-full bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors">
+                    <i class="fas fa-sun text-yellow-600 dark:hidden"></i>
+                    <i class="fas fa-moon text-indigo-400 hidden dark:block"></i>
                 </button>
-
-                <!-- Mobile Menu Button -->
-                <div class="md:hidden">
-                    <button type="button" onclick="toggleMobileMenu()" class="text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white focus:outline-none p-2">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
-                </div>
             </div>
-        </div>
-
-        <!-- Mobile Menu Dropdown -->
-        <div class="md:hidden hidden absolute top-full left-0 w-full mt-2 glass-panel rounded-2xl p-4 flex flex-col space-y-2 shadow-xl" id="mobile-menu">
-            <a href="#home" onclick="toggleMobileMenu()" class="block px-4 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-black/5 dark:hover:bg-white/10 rounded-lg">Home</a>
-            <a href="#about" onclick="toggleMobileMenu()" class="block px-4 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-black/5 dark:hover:bg-white/10 rounded-lg">About</a>
-            <a href="#projects" onclick="toggleMobileMenu()" class="block px-4 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-black/5 dark:hover:bg-white/10 rounded-lg">Projects</a>
-            <a href="#contact" onclick="toggleMobileMenu()" class="block px-4 py-2 text-sm text-primary dark:text-indigo-400 font-semibold hover:bg-black/5 dark:hover:bg-white/10 rounded-lg">Contact Me</a>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section id="home" class="min-h-screen flex items-center justify-center relative pt-24 md:pt-32 z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <div class="hero-animate flex flex-col items-center">
-                <!-- Updated Badge to match Glassmorphism theme and dark mode -->
-                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-panel border border-white/50 dark:border-white/10 bg-white/30 dark:bg-white/5 text-xs font-medium text-slate-700 dark:text-slate-300 mb-8 shadow-sm backdrop-blur-md">
-                    <span class="relative flex h-2 w-2">
-                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
-                      <span class="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
-                    </span>
-                    Available for Work
-                </div>
-                
-                <h1 class="text-5xl md:text-8xl font-heading font-bold text-slate-900 dark:text-white mb-6 tracking-tight leading-[1.1] transition-colors">
-                    Crafting digital <br>
-                    <span class="text-gradient">masterpieces.</span>
-                </h1>
-                
-                <p class="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-slate-500 dark:text-slate-400 mb-10 leading-relaxed font-light transition-colors">
-                    I'm a creative developer who bridges the gap between design and engineering. I build accessible, pixel-perfect, and performant web experiences.
-                </p>
-                
-                <div class="flex flex-col sm:flex-row gap-4 items-center">
-                    <a href="#projects" class="group relative px-8 py-3.5 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-semibold text-sm transition-transform hover:scale-105 active:scale-95 shadow-xl shadow-slate-900/20 dark:shadow-white/10">
-                        <span class="relative z-10">View Projects</span>
-                        <div class="absolute inset-0 rounded-full bg-gradient-to-r from-primary to-accent opacity-0 group-hover:opacity-20 transition-opacity blur-md"></div>
-                    </a>
-                    <a href="#contact" class="px-8 py-3.5 rounded-full glass-panel text-slate-900 dark:text-white font-medium text-sm hover:bg-white dark:hover:bg-white/10 transition-colors border border-slate-200 dark:border-white/10">
-                        Contact Me
-                    </a>
-                </div>
-
-                <!-- Tech Stack Strip -->
-                <div class="mt-20 pt-10 border-t border-slate-200 dark:border-white/10 w-full max-w-4xl transition-colors">
-                    <p class="text-sm text-slate-400 dark:text-slate-500 mb-6 font-medium uppercase tracking-wider">Favorite Stack</p>
-                    <!-- Removed hover:opacity-100 and transitions to make it static -->
-                    <div class="flex flex-wrap justify-center items-center gap-8 md:gap-12 opacity-60 grayscale">
-                        <!-- React -->
-                        <i class="fab fa-react text-3xl text-cyan-400" title="React"></i>
-                        
-                        <!-- JavaScript -->
-                        <i class="fab fa-js text-3xl text-yellow-400" title="JavaScript"></i>
-
-                        <!-- HTML -->
-                        <i class="fab fa-html5 text-3xl text-yellow-400" title="HTML"></i>
-
-                        <!-- CSS3 -->
-                        <i class="fab fa-css3-alt text-3xl text-blue-500" title="CSS3"></i>
-
-                        <!-- Node.js -->
-                        <i class="fab fa-node text-3xl text-green-500" title="Node.js"></i>
-
-                        <!-- Figma -->
-                        <i class="fab fa-figma text-3xl text-pink-500" title="Figma"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="py-20 md:py-24 relative z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                <!-- Image/Card Area -->
-                <div class="relative reveal">
-                    <div class="absolute -inset-4 bg-gradient-to-r from-primary via-secondary to-accent rounded-[2rem] blur-2xl opacity-20"></div>
-                    <!-- Reduced width from max-w-md to max-w-sm for a smaller footprint -->
-                    <div class="relative glass-panel rounded-[2rem] p-6 border border-white/50 dark:border-white/10 bg-white/40 dark:bg-white/5 max-w-sm mx-auto w-full">
-                        <div class="aspect-[4/5] rounded-2xl overflow-hidden relative shadow-lg">
-                            <!-- Updated Image: Geometric Abstract Dark Theme -->
-                            <img 
-                                src="https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?q=80&w=1000&auto=format&fit=crop" 
-                                alt="3D Geometric Abstract Art" 
-                                class="w-full h-full object-cover"
-                            >
-                            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent"></div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Content Area -->
-                <div class="reveal">
-                    <h2 class="text-4xl md:text-5xl font-heading font-bold text-slate-900 dark:text-white mb-8 transition-colors">
-                        Driven by Design, <br>
-                        <span class="text-gradient">Powered by Code.</span>
-                    </h2>
-                    <div class="space-y-6 text-lg text-slate-600 dark:text-slate-300 font-light leading-relaxed transition-colors">
-                        <p>
-                            I'm a Full-Stack Developer based in Toronto with a passion for building comprehensive digital solutions. From the first pixel of design to the final database query, I love the entire process of bringing ideas to life.
-                        </p>
-                        <p>
-                            My focus is on creating scalable, user-friendly applications using modern web architecture. Whether it's crafting intuitive front-end interfaces or engineering robust back-end systems, I ensure every piece of the puzzle fits perfectly.
-                        </p>
-                    </div>
-
-                    <!-- Stats -->
-                    <div class="grid grid-cols-2 gap-6 mt-12 border-t border-slate-200 dark:border-white/10 pt-8 transition-colors">
-                        <div>
-                            <h3 class="text-3xl font-bold text-slate-900 dark:text-white font-heading">3+</h3>
-                            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Years of Exp.</p>
-                        </div>
-                        <div>
-                            <h3 class="text-3xl font-bold text-slate-900 dark:text-white font-heading">7+</h3>
-                            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Projects Completed</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Bento Grid Projects -->
-    <section id="projects" class="py-20 md:py-24 relative z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6 reveal">
-                <div>
-                    <h2 class="text-4xl font-heading font-bold text-slate-900 dark:text-white mb-4 transition-colors">Projects</h2>
-                    <p class="text-slate-500 dark:text-slate-400 text-lg transition-colors">A glimpse into my digital playground.</p>
-                </div>
-                <a target="_blank" rel="noopener noreferrer" href="https://github.com/consoletree?tab=repositories" class="group flex items-center gap-2 text-primary dark:text-indigo-400 border-b border-primary/30 dark:border-indigo-400/30 pb-1 hover:border-primary dark:hover:border-indigo-400 transition-all">
-                    View GitHub
-                    <i class="fas fa-arrow-right text-sm transform group-hover:translate-x-1 transition-transform"></i>
-                </a>
-            </div>
-
-            <!-- Bento Grid Layout -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[300px]">
-                
-                <!-- Large Feature Item -->
-                <a href="https://github.com/consoletree/neon-marketplace" target="_blank" rel="noopener noreferrer" class="lg:col-span-2 group relative rounded-3xl overflow-hidden glass-panel border border-white/50 dark:border-white/10 hover:border-primary/50 dark:hover:border-indigo-500/50 transition-all duration-500 reveal shadow-sm hover:shadow-xl block">
-                    <!-- Status Badge: In Progress -->
-                    <div class="absolute top-5 right-5 z-30 flex items-center gap-2 px-3 py-1 rounded-full bg-black/20 backdrop-blur-md border border-white/20 text-xs font-medium text-white shadow-sm">
-                        <span class="relative flex h-2 w-2">
-                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                          <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-400"></span>
-                        </span>
-                        In Progress
-                    </div>
-                    <!-- Image Background - Removed zoom effect -->
-                    <div class="absolute inset-0">
-                        <img 
-                            src="https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=1600&auto=format&fit=crop" 
-                            alt="Neon Marketplace Interface" 
-                            class="w-full h-full object-cover"
-                        >
-                    </div>
-                    <!-- Increased opacity for better text readability -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-slate-900/60 to-transparent z-10 pointer-events-none"></div>
-                    
-                    <div class="absolute bottom-0 left-0 p-8 z-20 w-full">
-                        <div class="flex justify-between items-end">
-                            <div>
-                                <div class="flex gap-2 mb-3">
-                                    <span class="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-medium text-white border border-white/20">E-Commerce</span>
-                                    <span class="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-medium text-white border border-white/20">React</span>
-                                </div>
-                                <h3 class="text-3xl font-heading font-bold text-white mb-2 drop-shadow-md">Neon Marketplace</h3>
-                                <p class="text-slate-100 max-w-lg line-clamp-2 drop-shadow-sm font-medium">A futuristic shopping platform with 3D product previews and real-time inventory tracking built with Next.js and WebGL.</p>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-
-                <!-- Tall Feature Item -->
-                <a href="https://github.com/consoletree/hexie" target="_blank" rel="noopener noreferrer" class="group relative rounded-3xl overflow-hidden glass-panel border border-white/50 dark:border-white/10 hover:border-secondary/50 dark:hover:border-purple-500/50 transition-all duration-500 reveal delay-100 shadow-sm hover:shadow-xl block">
-                    <!-- Image Background - Removed zoom effect -->
-                    <div class="absolute inset-0">
-                        <img 
-                            src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=1000&auto=format&fit=crop" 
-                            alt="Abstract Colorful Gradient" 
-                            class="w-full h-full object-cover"
-                        >
-                    </div>
-                    <!-- Increased opacity -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-slate-900/60 to-transparent z-10 pointer-events-none"></div>
-                    
-                    <div class="absolute bottom-0 left-0 p-8 z-20">
-                        <div class="flex gap-2 mb-3">
-                            <span class="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-medium text-white border border-white/20">Bash</span>
-                        </div>
-                        <h3 class="text-2xl font-heading font-bold text-white mb-2 drop-shadow-md">Hexie</h3>
-                        <p class="text-slate-100 text-sm drop-shadow-sm font-medium">Color Selection in your fingertips.</p>
-                    </div>
-                </a>
-
-                <!-- Regular Item -->
-                <a href="https://github.com/consoletree/sysconfigs" target="_blank" rel="noopener noreferrer" class="group relative rounded-3xl overflow-hidden glass-panel border border-white/50 dark:border-white/10 hover:border-accent/50 dark:hover:border-cyan-500/50 transition-all duration-500 reveal shadow-sm hover:shadow-xl block">
-                     <!-- Image Background - Removed zoom effect -->
-                     <div class="absolute inset-0">
-                        <img 
-                            src="https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?q=80&w=1000&auto=format&fit=crop" 
-                            alt="Dark Server Room and Code" 
-                            class="w-full h-full object-cover"
-                        >
-                    </div>
-                    <!-- Increased opacity -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-slate-900/60 to-transparent z-10 pointer-events-none"></div>
-                    
-                    <div class="absolute bottom-0 left-0 p-8 z-20">
-                        <div class="flex gap-2 mb-3">
-                            <span class="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-medium text-white border border-white/20">Bash</span>
-                            <span class="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-medium text-white border border-white/20">Linux</span>
-                        </div>
-                        <h3 class="text-2xl font-heading font-bold text-white mb-2 drop-shadow-md">sysconfigs</h3>
-                        <p class="text-slate-100 text-sm drop-shadow-sm font-medium">Arch Linux setup automation script</p>
-                    </div>
-                </a>
-
-                <!-- Regular Item (Spans 2 columns) -->
-                <a href="https://github.com/consoletree/space-odyssey" target="_blank" rel="noopener noreferrer" class="lg:col-span-2 group relative rounded-3xl overflow-hidden glass-panel border border-white/50 dark:border-white/10 hover:border-purple-500/50 dark:hover:border-purple-500/50 transition-all duration-500 reveal delay-100 shadow-sm hover:shadow-xl block">
-                    <!-- Status Badge: In Progress -->
-                    <div class="absolute top-5 right-5 z-30 flex items-center gap-2 px-3 py-1 rounded-full bg-black/20 backdrop-blur-md border border-white/20 text-xs font-medium text-white shadow-sm">
-                        <span class="relative flex h-2 w-2">
-                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                          <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-400"></span>
-                        </span>
-                        In Progress
-                    </div>                    
-                     <!-- Image Background - Removed zoom effect -->
-                     <div class="absolute inset-0">
-                        <img 
-                            src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1600&auto=format&fit=crop" 
-                            alt="Space and Planet" 
-                            class="w-full h-full object-cover"
-                        >
-                    </div>
-                    <!-- Increased opacity -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-slate-900/60 to-transparent z-10 pointer-events-none"></div>
-                    
-                    <div class="absolute bottom-0 left-0 p-8 z-20">
-                        <div class="flex gap-2 mb-3">
-                            <span class="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-medium text-white border border-white/20">WebGL</span>
-                             <span class="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-medium text-white border border-white/20">Three.js</span>
-                        </div>
-                        <h3 class="text-3xl font-heading font-bold text-white mb-2 drop-shadow-md">Space Odyssey 3D</h3>
-                        <p class="text-slate-100 max-w-lg drop-shadow-sm font-medium">An immersive browser-based game exploring the solar system.</p>
-                    </div>
-                </a>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Hobbies / Personal Section -->
-    <section id="personal" class="py-20 md:py-24 relative z-10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16 reveal">
-                <h2 class="text-3xl md:text-4xl font-heading font-bold text-slate-900 dark:text-white mb-4 transition-colors">
-                    Don't forget I am <span class="text-gradient">a human too</span>
-                </h2>
-                <p class="text-slate-500 dark:text-slate-400 text-lg transition-colors">Click the cards to see what keeps me busy.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 reveal">
-                
-                <!-- Hobby 1: French -->
-                <div class="perspective-1000 h-[320px] cursor-pointer group" onclick="toggleFlip(this)">
-                    <div class="flip-card-inner relative w-full h-full transition-transform duration-700 transform-style-3d">
-                        
-                        <!-- Front Face -->
-                        <div class="absolute inset-0 backface-hidden glass-panel p-8 rounded-2xl border border-white/50 dark:border-white/10 text-center bg-white/40 dark:bg-white/5 shadow-sm hover:shadow-lg flex flex-col justify-center items-center">
-                            <div class="w-16 h-16 mx-auto bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center text-blue-600 dark:text-blue-400 text-2xl mb-6">
-                                <i class="fas fa-language"></i>
-                            </div>
-                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Language Enthusiast</h3>
-                            <p class="text-slate-500 dark:text-slate-400">Currently at <span class="font-semibold text-slate-700 dark:text-slate-200">French B1</span> level.</p>
-                            <p class="text-xs text-primary dark:text-indigo-400 mt-4 font-medium uppercase tracking-wider">Tap to Flip <i class="fas fa-sync ml-1"></i></p>
-                        </div>
-
-                        <!-- Back Face -->
-                        <div class="absolute inset-0 backface-hidden rotate-y-180 glass-panel p-8 rounded-2xl border border-white/50 dark:border-white/10 text-center bg-white/90 dark:bg-slate-800 shadow-sm flex flex-col justify-center items-center">
-                            <div class="w-12 h-12 mx-auto bg-blue-50 dark:bg-blue-900/20 rounded-full flex items-center justify-center text-blue-500 dark:text-blue-400 text-lg mb-4">
-                                <i class="fas fa-quote-left"></i>
-                            </div>
-                            <p class="text-slate-600 dark:text-slate-300 italic mb-4">"Petit à petit, l'oiseau fait son nid."</p>
-                            <p class="text-sm text-slate-500 dark:text-slate-400">I practice daily on Duolingo and love watching French cinema to improve my listening skills.</p>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- Hobby 2: Trading -->
-                <div class="perspective-1000 h-[320px] cursor-pointer group" onclick="toggleFlip(this)">
-                    <div class="flip-card-inner relative w-full h-full transition-transform duration-700 transform-style-3d">
-                        
-                        <!-- Front Face -->
-                        <div class="absolute inset-0 backface-hidden glass-panel p-8 rounded-2xl border border-white/50 dark:border-white/10 text-center bg-white/40 dark:bg-white/5 shadow-sm hover:shadow-lg flex flex-col justify-center items-center">
-                            <div class="w-16 h-16 mx-auto bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-green-600 dark:text-green-400 text-2xl mb-6">
-                                <i class="fas fa-chart-line"></i>
-                            </div>
-                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Market Trading</h3>
-                            <p class="text-slate-500 dark:text-slate-400">Fascinated by the financial ecosystem.</p>
-                            <p class="text-xs text-primary dark:text-indigo-400 mt-4 font-medium uppercase tracking-wider">Tap to Flip <i class="fas fa-sync ml-1"></i></p>
-                        </div>
-
-                        <!-- Back Face -->
-                        <div class="absolute inset-0 backface-hidden rotate-y-180 glass-panel p-8 rounded-2xl border border-white/50 dark:border-white/10 text-center bg-white/90 dark:bg-slate-800 shadow-sm flex flex-col justify-center items-center">
-                            <h4 class="text-green-600 dark:text-green-400 font-bold mb-2">My Strategy</h4>
-                            <p class="text-slate-600 dark:text-slate-300 text-sm mb-4">I focus on technical analysis for Stocks and ETFs. Risk management is my #1 rule.</p>
-                            <div class="flex gap-2 justify-center">
-                                <span class="px-2 py-1 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 text-xs rounded-md">S&P 500</span>
-                                <span class="px-2 py-1 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 text-xs rounded-md">Crypto</span>
-                            </div>
-                        </div>
-                        
-                    </div>
-                </div>
-
-                <!-- Hobby 3: Travelling -->
-                <div class="perspective-1000 h-[320px] cursor-pointer group" onclick="toggleFlip(this)">
-                    <div class="flip-card-inner relative w-full h-full transition-transform duration-700 transform-style-3d">
-                        
-                        <!-- Front Face -->
-                        <div class="absolute inset-0 backface-hidden glass-panel p-8 rounded-2xl border border-white/50 dark:border-white/10 text-center bg-white/40 dark:bg-white/5 shadow-sm hover:shadow-lg flex flex-col justify-center items-center">
-                            <div class="w-16 h-16 mx-auto bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center text-purple-600 dark:text-purple-400 text-2xl mb-6">
-                                <i class="fas fa-plane-departure"></i>
-                            </div>
-                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Travelling</h3>
-                            <p class="text-slate-500 dark:text-slate-400">Always planning the next adventure.</p>
-                            <p class="text-xs text-primary dark:text-indigo-400 mt-4 font-medium uppercase tracking-wider">Tap to Flip <i class="fas fa-sync ml-1"></i></p>
-                        </div>
-
-                        <!-- Back Face -->
-                        <div class="absolute inset-0 backface-hidden rotate-y-180 glass-panel p-8 rounded-2xl border border-white/50 dark:border-white/10 text-center bg-white/90 dark:bg-slate-800 shadow-sm flex flex-col justify-center items-center">
-                            <h4 class="text-purple-600 dark:text-purple-400 font-bold mb-2">Travel Stats</h4>
-                            <ul class="text-slate-600 dark:text-slate-300 text-sm space-y-2 mb-4 text-left w-full px-4">
-                                <li class="flex justify-between"><span>Countries:</span> <span class="font-bold">5</span></li>
-                                <li class="flex justify-between"><span>Favorite:</span> <span class="font-bold">Japan 🇯🇵</span></li>
-                                <li class="flex justify-between"><span>Next Stop:</span> <span class="font-bold">Kōfu 🏔️</span></li>
-                            </ul>
-                        </div>
-                        
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Modern Contact Section -->
-    <section id="contact" class="py-20 md:py-24 relative z-10">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="glass-panel rounded-[3rem] p-8 md:p-16 border border-white/50 dark:border-white/10 text-center relative overflow-hidden reveal shadow-xl bg-white/60 dark:bg-white/5">
-                <!-- Decorative Glows inside card -->
-                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-primary/20 rounded-full blur-[80px] -translate-y-1/2"></div>
-                
-                <div class="relative z-10">
-                    <h2 class="text-4xl md:text-6xl font-heading font-bold text-slate-900 dark:text-white mb-6 transition-colors">Let's work together.</h2>
-                    <p class="text-xl text-slate-500 dark:text-slate-400 mb-12 max-w-2xl mx-auto transition-colors">Creating meaningful experiences is my passion. Reach out if you want to create something memorable.</p>
-                    
-                    <div class="flex flex-col md:flex-row gap-8 justify-center items-center">
-                        <!-- Click to Reveal Email Button -->
-                        <button onclick="revealEmail(this)" class="group relative inline-flex items-center gap-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-8 py-4 rounded-full text-lg font-bold transition-transform hover:scale-105 shadow-lg shadow-slate-900/30 dark:shadow-white/20">
-                            <i class="fas fa-envelope"></i>
-                            <span id="email-text">Reveal Email</span>
-                            <div class="absolute inset-0 rounded-full bg-white/20 dark:bg-black/10 animate-pulse opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                        </button>
-
-                        <div class="flex gap-6">
-                            <!-- Updated Social Icons: Removed hover:-translate-y-1, added hover:scale-110 and duration-300 for smoother effect -->
-                            <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/itsaebin" class="w-14 h-14 rounded-full glass-panel border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-600 dark:text-slate-300 text-xl hover:bg-white dark:hover:bg-white/10 hover:text-primary dark:hover:text-white hover:border-primary/30 transition-all duration-300 hover:scale-110 shadow-sm">
-                                <i class="fab fa-linkedin-in"></i>
-                            </a>
-                            <a target="_blank" rel="noopener noreferrer" href="https://www.github.com/consoletree" class="w-14 h-14 rounded-full glass-panel border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-600 dark:text-slate-300 text-xl hover:bg-white dark:hover:bg-white/10 hover:text-primary dark:hover:text-white hover:border-primary/30 transition-all duration-300 hover:scale-110 shadow-sm">
-                                <i class="fab fa-github"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+    <!-- Main Container -->
+    <main class="max-w-6xl mx-auto px-6 pt-32 pb-20 relative z-10">
+        
+        <!-- Hero Section -->
+        <section id="about" class="mb-32 animate-slide-up">
+            <div class="flex items-center gap-3 mb-6">
+                <span class="inline-block py-1 px-3 rounded-full bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 text-xs font-bold tracking-wider border border-indigo-500/20">
+                    TORONTO, CANADA
+                </span>
+                <span class="inline-block py-1 px-3 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 text-xs font-bold tracking-wider border border-emerald-500/20">
+                    OPEN TO RELOCATION
+                </span>
             </div>
             
-            <div class="mt-16 flex flex-col md:flex-row justify-center items-center text-sm text-slate-400 dark:text-slate-500 transition-colors">
-                <p>&copy; 2026 consoletree. Built with passion & code.</p>
+            <h1 class="text-5xl md:text-7xl font-display font-bold text-black dark:text-white leading-[1.1] mb-8">
+                Technical Client Success <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-500 dark:to-purple-500">& L3 Incident Specialist.</span>
+            </h1>
+            
+            <p class="text-lg md:text-xl text-zinc-700 dark:text-zinc-400 max-w-2xl leading-relaxed mb-10">
+                Bridging the gap between engineering and end-users. With ~3 years of experience supporting enterprise clients, I specialize in <strong>Salesforce Operations</strong>, <strong>L3 Incident Management</strong>, and <strong>User Advocacy</strong>.
+            </p>
+            
+            <div class="flex flex-wrap gap-4">
+                <a href="#experience" class="px-6 py-3 bg-zinc-900 dark:bg-white text-white dark:text-black font-semibold rounded-lg hover:opacity-90 transition-opacity">
+                    View Experience
+                </a>
+                <a href="#contact" class="px-6 py-3 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white font-medium rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors border border-zinc-300 dark:border-zinc-700">
+                    <i class="far fa-envelope mr-2"></i> Contact Me
+                </a>
             </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="mb-32">
+            <div class="flex items-end justify-between mb-12">
+                <h2 class="text-3xl font-display font-bold text-black dark:text-white">Professional Experience</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                
+                <!-- Left: Work History -->
+                <div class="md:col-span-8 space-y-6">
+                    
+                    <!-- Job 1 -->
+                    <div class="group relative bg-card-light dark:bg-card-dark p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 hover-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-xl font-bold text-black dark:text-white">Technical Client Success Specialist (Tier 3)</h3>
+                                <p class="text-indigo-600 dark:text-indigo-500 font-medium">Zedd Customer Solutions</p>
+                            </div>
+                            <span class="text-xs font-bold text-zinc-600 dark:text-zinc-400 border border-zinc-300 dark:border-zinc-700 px-2 py-1 rounded whitespace-nowrap">
+                                Mar 2023 - Present
+                            </span>
+                        </div>
+                        
+                        <p class="text-zinc-700 dark:text-zinc-400 text-sm leading-relaxed">
+                            Serving as the primary bridge between enterprise clients and engineering teams. I lead L3 incident resolution and mentor new hires on Salesforce operations, consistently maintaining a <strong class="text-black dark:text-white">94.70% Quality Assurance score</strong> through proactive communication and rapid issue resolution via Slack and JIRA.
+                        </p>
+                    </div>
+
+                    <!-- Job 2 -->
+                    <div class="group relative bg-card-light dark:bg-card-dark p-8 rounded-2xl border border-zinc-200 dark:border-zinc-800 hover-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-xl font-bold text-black dark:text-white">IT User Support Specialist</h3>
+                                <p class="text-indigo-600 dark:text-indigo-500 font-medium">Lambton College</p>
+                            </div>
+                            <span class="text-xs font-bold text-zinc-600 dark:text-zinc-400 border border-zinc-300 dark:border-zinc-700 px-2 py-1 rounded whitespace-nowrap">
+                                Apr 2022 - Nov 2022
+                            </span>
+                        </div>
+                        
+                        <p class="text-zinc-700 dark:text-zinc-400 text-sm leading-relaxed">
+                            Managed IT infrastructure and technical support for 50+ workstations, ensuring high availability of Microsoft Office 365 and network services. Collaborated directly with department heads to assess hardware needs and streamline software deployments for faculty and students.
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Right: Education & Certs -->
+                <div class="md:col-span-4 space-y-6">
+                    
+                    <!-- Education -->
+                    <div class="bg-card-light dark:bg-card-dark p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800">
+                        <h3 class="text-sm font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-500 mb-6"><i class="fas fa-graduation-cap mr-2"></i> Education</h3>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <h4 class="text-sm font-bold text-black dark:text-white">B.Sc Computer Applications</h4>
+                                <p class="text-xs text-zinc-700 dark:text-zinc-400 mb-1">Manipal University Jaipur</p>
+                                <p class="text-[10px] text-indigo-600 dark:text-indigo-500 font-mono">Expected Mar 2026</p>
+                            </div>
+                            <div class="border-t border-zinc-200 dark:border-zinc-800 pt-4">
+                                <h4 class="text-sm font-bold text-black dark:text-white">Diploma: Computer Programming</h4>
+                                <p class="text-xs text-zinc-700 dark:text-zinc-400 mb-1">Lambton College, Toronto</p>
+                                <p class="text-[10px] text-indigo-600 dark:text-indigo-500 font-mono">Dec 2022</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Certifications -->
+                    <div class="bg-card-light dark:bg-card-dark p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800">
+                        <h3 class="text-sm font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-500 mb-6"><i class="fas fa-certificate mr-2"></i> Certifications</h3>
+                        
+                        <ul class="space-y-3">
+                            <li class="flex items-center gap-3">
+                                <i class="fab fa-salesforce text-blue-600 dark:text-blue-500 text-lg"></i>
+                                <span class="text-xs font-medium text-zinc-700 dark:text-zinc-300">Salesforce Sales Operations</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i class="fas fa-brain text-pink-600 dark:text-pink-400 text-lg"></i>
+                                <span class="text-xs font-medium text-zinc-700 dark:text-zinc-300">IBM Generative AI Engineering</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i class="fab fa-google text-red-600 dark:text-red-500 text-lg"></i>
+                                <span class="text-xs font-medium text-zinc-700 dark:text-zinc-300">Google Project Management</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i class="fas fa-layer-group text-purple-600 dark:text-purple-500 text-lg"></i>
+                                <span class="text-xs font-medium text-zinc-700 dark:text-zinc-300">Foundations in UX Design</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Competencies Section -->
+        <section id="skills" class="mb-32">
+            <h2 class="text-3xl font-display font-bold text-black dark:text-white mb-8">Core Competencies</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <!-- Card 1 -->
+                <div class="bg-card-light dark:bg-card-dark p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800">
+                    <h3 class="text-lg font-bold text-indigo-600 dark:text-indigo-500 mb-4">Client Success Strategy</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1.5 bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 text-xs font-medium rounded-md border border-indigo-500/20">Account Management</span>
+                        <span class="px-3 py-1.5 bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 text-xs font-medium rounded-md border border-indigo-500/20">Voice of Customer (VOC)</span>
+                        <span class="px-3 py-1.5 bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 text-xs font-medium rounded-md border border-indigo-500/20">Churn Reduction</span>
+                        <span class="px-3 py-1.5 bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 text-xs font-medium rounded-md border border-indigo-500/20">Customer Onboarding</span>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-card-light dark:bg-card-dark p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800">
+                    <h3 class="text-lg font-bold text-emerald-600 dark:text-emerald-500 mb-4">Technical Expertise</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1.5 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 text-xs font-medium rounded-md border border-emerald-500/20">Salesforce (CRM)</span>
+                        <span class="px-3 py-1.5 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 text-xs font-medium rounded-md border border-emerald-500/20">Postman (API Testing)</span>
+                        <span class="px-3 py-1.5 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 text-xs font-medium rounded-md border border-emerald-500/20">SQL (MySQL)</span>
+                        <span class="px-3 py-1.5 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 text-xs font-medium rounded-md border border-emerald-500/20">Linux Admin</span>
+                        <span class="px-3 py-1.5 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 text-xs font-medium rounded-md border border-emerald-500/20">L3 Incident Mgmt</span>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-card-light dark:bg-card-dark p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800">
+                    <h3 class="text-lg font-bold text-purple-600 dark:text-purple-500 mb-4">Development & Agile</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1.5 bg-purple-500/10 text-purple-700 dark:text-purple-300 text-xs font-medium rounded-md border border-purple-500/20">React.js</span>
+                        <span class="px-3 py-1.5 bg-purple-500/10 text-purple-700 dark:text-purple-300 text-xs font-medium rounded-md border border-purple-500/20">SDLC</span>
+                        <span class="px-3 py-1.5 bg-purple-500/10 text-purple-700 dark:text-purple-300 text-xs font-medium rounded-md border border-purple-500/20">Agile/Scrum</span>
+                        <span class="px-3 py-1.5 bg-purple-500/10 text-purple-700 dark:text-purple-300 text-xs font-medium rounded-md border border-purple-500/20">CI/CD</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Portfolio Section -->
+        <section id="projects" class="mb-32">
+            <h2 class="text-3xl font-display font-bold text-black dark:text-white mb-12">Technical Projects</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <!-- Main Portfolio Project (Swapped to Sysconfigs) -->
+                <a href="https://github.com/consoletree/sysconfigs" target="_blank" class="group relative bg-card-light dark:bg-card-dark rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 hover:border-indigo-500/50 transition-colors block">
+                    <!-- Split Layout -->
+                    <div class="grid md:grid-cols-2 h-full">
+                        <div class="p-8 flex flex-col justify-center">
+                            <h3 class="text-2xl font-bold text-black dark:text-white mb-2">Sysconfigs</h3>
+                            <p class="text-sm font-medium text-indigo-600 dark:text-indigo-500 mb-4">Linux Environment Automation</p>
+                            <p class="text-sm text-zinc-700 dark:text-zinc-400 mb-6 leading-relaxed">
+                                Automated Arch Linux setup script handling dotfiles, package installation, and environment configuration. Reduces setup time from hours to minutes.
+                            </p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2 py-1 bg-zinc-200 dark:bg-zinc-800 text-[10px] font-bold uppercase rounded text-zinc-700 dark:text-zinc-400">Bash</span>
+                                <span class="px-2 py-1 bg-zinc-200 dark:bg-zinc-800 text-[10px] font-bold uppercase rounded text-zinc-700 dark:text-zinc-400">Linux</span>
+                                <span class="px-2 py-1 bg-zinc-200 dark:bg-zinc-800 text-[10px] font-bold uppercase rounded text-zinc-700 dark:text-zinc-400">Shell</span>
+                            </div>
+                        </div>
+                        <div class="bg-zinc-100 dark:bg-zinc-900 min-h-[200px] relative overflow-hidden">
+                            <!-- Sysconfigs Visual -->
+                            <div class="absolute inset-0 bg-gradient-to-br from-indigo-500/20 to-purple-500/20"></div>
+                            <img src="https://images.unsplash.com/photo-1518432031352-d6fc5c10da5a?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover mix-blend-overlay opacity-50 hover:opacity-100 transition-opacity duration-500" alt="Code">
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Secondary Projects Grid -->
+                <div class="grid grid-rows-2 gap-4">
+                    
+                    <!-- Hexie Project -->
+                    <a href="https://github.com/consoletree/hexie" target="_blank" class="group relative bg-card-light dark:bg-card-dark p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 hover:border-indigo-500/50 transition-colors">
+                        <h4 class="font-bold text-black dark:text-white mb-1">Hexie</h4>
+                        <p class="text-xs text-zinc-600 dark:text-zinc-500 mb-3">Color Manipulation Utility</p>
+                        <div class="flex gap-2">
+                             <span class="text-[10px] px-2 py-1 border border-zinc-400 dark:border-zinc-700 rounded text-zinc-600 dark:text-zinc-400">Bash</span>
+                             <span class="text-[10px] px-2 py-1 border border-zinc-400 dark:border-zinc-700 rounded text-zinc-600 dark:text-zinc-400">Tooling</span>
+                        </div>
+                        <div class="absolute top-6 right-6 text-zinc-600 group-hover:text-indigo-500 transition-colors"><i class="fas fa-external-link-alt"></i></div>
+                    </a>
+
+                    <!-- Console Tree Project (Moved here) -->
+                    <a href="https://github.com/consoletree/consoletree.github.io" target="_blank" class="group relative bg-card-light dark:bg-card-dark p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 hover:border-indigo-500/50 transition-colors">
+                        <h4 class="font-bold text-black dark:text-white mb-1">Console Tree</h4>
+                        <p class="text-xs text-zinc-600 dark:text-zinc-500 mb-3">Portfolio SPA</p>
+                        <div class="flex gap-2">
+                             <span class="text-[10px] px-2 py-1 border border-zinc-400 dark:border-zinc-700 rounded text-zinc-600 dark:text-zinc-400">React</span>
+                             <span class="text-[10px] px-2 py-1 border border-zinc-400 dark:border-zinc-700 rounded text-zinc-600 dark:text-zinc-400">CI/CD</span>
+                        </div>
+                        <div class="absolute top-6 right-6 text-zinc-600 group-hover:text-indigo-500 transition-colors"><i class="fas fa-external-link-alt"></i></div>
+                    </a>
+
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+    
+    <!-- Updated Contact Section (One Line) -->
+    <section id="contact" class="py-24 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-black relative z-10">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-3xl font-display font-bold text-black dark:text-white mb-6">Let's Connect</h2>
+            <p class="text-zinc-600 dark:text-zinc-400 mb-12 max-w-xl mx-auto leading-relaxed">
+                I am actively seeking opportunities in <strong>Technical Support Leadership</strong>, <strong>Client Success</strong>, and <strong>Full Stack Development</strong>.
+            </p>
+
+            <!-- One Line Container for Buttons -->
+            <div class="flex flex-wrap justify-center items-center gap-6">
+                
+                <!-- Reveal Email Button -->
+                <button onclick="revealEmail(this)" class="group relative inline-flex items-center gap-3 px-8 py-3.5 bg-indigo-600 text-white font-bold rounded-full hover:bg-indigo-700 transition-all shadow-lg hover:shadow-indigo-500/25">
+                    <i class="fas fa-envelope"></i>
+                    <span id="email-text">Reveal Email</span>
+                </button>
+
+                <!-- Divider -->
+                <div class="hidden md:block w-px h-8 bg-zinc-300 dark:bg-zinc-700"></div>
+
+                <!-- Social Icons -->
+                <div class="flex gap-6">
+                    <a href="https://github.com/consoletree" target="_blank" class="text-zinc-500 hover:text-black dark:hover:text-white transition-colors text-2xl" title="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://linkedin.com/in/itsaebin" target="_blank" class="text-zinc-500 hover:text-black dark:hover:text-white transition-colors text-2xl" title="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                </div>
+            </div>
+
+            <p class="mt-16 text-zinc-500 text-sm font-medium">© 2026 Console Tree. All Rights Reserved.</p>
         </div>
     </section>
 
     <script>
-        // Theme Toggle Function
         function toggleTheme() {
             if (document.documentElement.classList.contains('dark')) {
                 document.documentElement.classList.remove('dark');
@@ -625,87 +407,23 @@
             }
         }
 
-        // Mobile Menu Toggle
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
-        }
-
-        // Scroll Reveal Animation
-        const revealElements = document.querySelectorAll('.reveal');
-
-        const revealOnScroll = () => {
-            const windowHeight = window.innerHeight;
-            const elementVisible = 150;
-
-            revealElements.forEach((reveal) => {
-                const elementTop = reveal.getBoundingClientRect().top;
-                if (elementTop < windowHeight - elementVisible) {
-                    reveal.classList.add('active');
-                }
-            });
-        };
-
-        window.addEventListener('scroll', revealOnScroll);
-        // Trigger once on load
-        revealOnScroll();
-
-        // Navbar Float Effect on Scroll (Updated for Dark Mode)
-        window.addEventListener('scroll', () => {
-            const nav = document.getElementById('navbar');
-            if (window.scrollY > 50) {
-                // Add opaque background based on theme (handled by CSS glass-nav class mostly, but can enhance here)
-                nav.classList.add('shadow-md');
-                if (document.documentElement.classList.contains('dark')) {
-                     nav.style.backgroundColor = 'rgba(15, 23, 42, 0.9)'; // Darker opaque
-                } else {
-                     nav.style.backgroundColor = 'rgba(255, 255, 255, 0.9)'; // White opaque
-                }
-            } else {
-                nav.classList.remove('shadow-md');
-                nav.style.backgroundColor = ''; // Revert to glass-nav CSS
-            }
-        });
-        
-        // Listen for theme changes to update navbar instantly if scrolled
-        const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                if (mutation.attributeName === "class" && window.scrollY > 50) {
-                    const nav = document.getElementById('navbar');
-                    if (document.documentElement.classList.contains('dark')) {
-                         nav.style.backgroundColor = 'rgba(15, 23, 42, 0.9)';
-                    } else {
-                         nav.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-                    }
-                }
-            });
-        });
-        observer.observe(document.documentElement, { attributes: true });
-
-        // Toggle Flip Card
-        function toggleFlip(card) {
-            const inner = card.querySelector('.flip-card-inner');
-            inner.classList.toggle('rotate-y-180');
-        }
-
-        // Email Reveal Function
+        // Email Reveal Logic
         function revealEmail(btn) {
-            const email = "abinrantony@icloud.com";
+            const email = "abinrajesh78@gmail.com";
             const span = document.getElementById('email-text');
             
-            // Change text
+            // 1. Change Text
             span.innerText = email;
             
-            // Remove the reveal onclick handler and make it a functional mailto link
+            // 2. Remove color change logic, just make it clickable functionality-wise
             btn.onclick = null;
             btn.addEventListener('click', () => {
                 window.location.href = "mailto:" + email;
             });
             
-            // Optional: visual feedback that it's now active
-            btn.classList.add('ring-2', 'ring-offset-2', 'ring-primary');
+            // Optional: Change cursor style to indicate it's now a link
+            btn.style.cursor = "pointer";
         }
     </script>
 </body>
 </html>
-

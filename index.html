@@ -120,9 +120,10 @@
             </div>
 
             <div class="flex items-center gap-4">
-                <button onclick="revealEmail(this)" class="px-6 py-2 bg-primary/10 hover:bg-primary text-white text-xs font-bold rounded-full border border-primary/50 transition-all shadow-[0_0_10px_rgba(99,102,241,0.2)] hover:shadow-[0_0_20px_rgba(99,102,241,0.6)]">
-                    <span id="nav-btn-text">CONNECT</span>
-                </button>
+                <!-- Connect Button (Updated to Anchor Link) -->
+                <a href="#connect" class="px-6 py-2 bg-primary/10 hover:bg-primary text-white text-xs font-bold rounded-full border border-primary/50 transition-all shadow-[0_0_10px_rgba(99,102,241,0.2)] hover:shadow-[0_0_20px_rgba(99,102,241,0.6)]">
+                    CONNECT
+                </a>
                  <!-- Mobile Menu Toggle -->
                  <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="md:hidden text-white">
                     <i class="fas fa-bars"></i>
@@ -365,7 +366,7 @@
         </section>
 
         <!-- Footer -->
-        <footer class="max-w-2xl mx-auto text-center pt-32 pb-16">
+        <footer id="connect" class="max-w-2xl mx-auto text-center pt-32 pb-16">
             <h2 class="text-3xl font-bold text-white mb-6">Initialize Connection?</h2>
             <p class="text-slate-400 mb-8">
                 Actively seeking opportunities in Technical Account Management.
@@ -402,15 +403,10 @@
                 // Set state to revealed
                 emailRevealed = true;
                 
-                // Update Text in UI
+                // Update Text in UI (Footer only now)
                 const footerText = document.getElementById('email-text-footer');
-                const navText = document.getElementById('nav-btn-text');
     
                 if(footerText) footerText.innerText = email;
-                if(navText) navText.innerText = email;
-                
-                // Optional: You can add specific class changes here if you want to visually indicate "active state"
-                // For now, the text change provides clear feedback.
             }
         </script>
 </body>

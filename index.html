@@ -96,7 +96,7 @@
         }
     </style>
 </head>
-<body class="bg-background text-slate-300 antialiased selection:bg-primary/30 selection:text-white">
+<body class="bg-background text-slate-300 antialiased selection:bg-primary/30 selection:text-white overflow-x-hidden">
 
     <!-- Background Effects -->
     <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
@@ -107,9 +107,12 @@
 
     <!-- Navigation (Floating Pill) -->
     <nav class="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-4xl">
-        <div class="glass-panel rounded-full px-6 py-3 flex items-center justify-between">
-            <!-- Updated Logo -->
+        <div class="glass-panel rounded-full px-4 md:px-6 py-3 flex items-center justify-between">
+            <!-- Updated Logo: Icon always visible, Text hidden on small mobile -->
             <a href="#" class="flex items-center gap-2 group">
+                <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary border border-primary/30">
+                    <i class="fas fa-code"></i>
+                </div>
                 <span class="font-bold text-white tracking-tight hidden sm:block">console<span class="text-primary group-hover:text-accent transition-colors">tree</span></span>
             </a>
 
@@ -121,31 +124,44 @@
                 <a href="#projects" class="hover:text-white transition-colors">SOLUTIONS</a>
             </div>
 
-            <div class="flex items-center gap-4">
-                <!-- Connect Button (Updated to Anchor Link) -->
-                <a href="#connect" class="px-6 py-2 bg-primary/10 hover:bg-primary text-white text-xs font-bold rounded-full border border-primary/50 transition-all shadow-[0_0_10px_rgba(99,102,241,0.2)] hover:shadow-[0_0_20px_rgba(99,102,241,0.6)]">
-                    CONNECT
+            <div class="flex items-center gap-3 md:gap-4">
+                <!-- Connect Button: Icon on Mobile, Text on Desktop -->
+                <a href="#connect" class="px-4 py-2 md:px-6 md:py-2 bg-primary/10 hover:bg-primary text-white text-xs font-bold rounded-full border border-primary/50 transition-all shadow-[0_0_10px_rgba(99,102,241,0.2)] hover:shadow-[0_0_20px_rgba(99,102,241,0.6)] flex items-center gap-2">
+                    <span class="hidden md:inline">CONNECT</span>
+                    <i class="fas fa-paper-plane md:hidden"></i>
                 </a>
                  <!-- Mobile Menu Toggle -->
-                 <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="md:hidden text-white">
-                    <i class="fas fa-bars"></i>
+                 <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="md:hidden text-slate-300 hover:text-white p-2">
+                    <i class="fas fa-bars text-lg"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Mobile Menu Dropdown (Numbers Removed) -->
-        <div id="mobile-menu" class="hidden mt-2 glass-panel rounded-2xl p-4 flex flex-col gap-3 md:hidden">
-            <a href="#mission" class="text-sm font-mono text-slate-400 hover:text-white p-2">MISSION</a>
-            <a href="#stack" class="text-sm font-mono text-slate-400 hover:text-white p-2">STACK</a>
-            <a href="#experience" class="text-sm font-mono text-slate-400 hover:text-white p-2">TRACK RECORD</a>
-            <a href="#projects" class="text-sm font-mono text-slate-400 hover:text-white p-2">SOLUTIONS</a>
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden mt-2 glass-panel rounded-2xl p-4 flex flex-col gap-1 md:hidden overflow-hidden">
+            <a href="#mission" onclick="toggleMobileMenu()" class="flex items-center justify-between text-sm font-mono text-slate-400 hover:text-white hover:bg-white/5 p-3 rounded-lg transition-colors">
+                <span>MISSION</span>
+                <i class="fas fa-chevron-right text-xs opacity-50"></i>
+            </a>
+            <a href="#stack" onclick="toggleMobileMenu()" class="flex items-center justify-between text-sm font-mono text-slate-400 hover:text-white hover:bg-white/5 p-3 rounded-lg transition-colors">
+                <span>STACK</span>
+                <i class="fas fa-chevron-right text-xs opacity-50"></i>
+            </a>
+            <a href="#experience" onclick="toggleMobileMenu()" class="flex items-center justify-between text-sm font-mono text-slate-400 hover:text-white hover:bg-white/5 p-3 rounded-lg transition-colors">
+                <span>TRACK RECORD</span>
+                <i class="fas fa-chevron-right text-xs opacity-50"></i>
+            </a>
+            <a href="#projects" onclick="toggleMobileMenu()" class="flex items-center justify-between text-sm font-mono text-slate-400 hover:text-white hover:bg-white/5 p-3 rounded-lg transition-colors">
+                <span>SOLUTIONS</span>
+                <i class="fas fa-chevron-right text-xs opacity-50"></i>
+            </a>
         </div>
     </nav>
 
-    <main class="relative z-10 pt-40 pb-20 px-6">
+    <main class="relative z-10 pt-32 md:pt-40 pb-20 px-6">
         
         <!-- Hero Section -->
-        <section id="mission" class="max-w-5xl mx-auto text-center mb-32">
+        <section id="mission" class="max-w-5xl mx-auto text-center mb-24 md:mb-32">
             <div class="flex flex-wrap justify-center gap-3 mb-8">
                 <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surfaceHighlight border border-white/10 text-slate-300 text-[10px] font-mono font-bold tracking-widest leading-none">
                     <i class="fas fa-map-marker-alt text-primary relative -top-[1px]"></i> TORONTO, CANADA
@@ -155,12 +171,12 @@
                 </div>
             </div>
 
-            <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-8 leading-[1.1]">
+            <h1 class="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-8 leading-[1.1]">
                 <span class="text-gradient">Bridging Logic</span> <br>
                 <span class="text-gradient-accent">& Business Value.</span>
             </h1>
 
-            <p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-12">
+            <p class="text-base md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-12">
                 I translate complex engineering realities into strategic business outcomes. 
                 Expert in <span class="text-white font-medium">Salesforce Ops</span>, 
                 <span class="text-white font-medium">Incident Management</span>, and 
@@ -177,7 +193,7 @@
             </div>
 
             <!-- Dashboard Stats -->
-            <div class="grid grid-cols-3 gap-4 mt-24 max-w-3xl mx-auto">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-16 md:mt-24 max-w-3xl mx-auto">
                 <div class="glass-panel p-6 rounded-2xl text-center">
                     <div class="text-3xl font-bold text-white mb-1">94%</div>
                     <div class="text-[10px] font-mono text-slate-500 uppercase">QA Score</div>
@@ -391,6 +407,10 @@
     </main>
 
     <script>
+            function toggleMobileMenu() {
+                document.getElementById('mobile-menu').classList.add('hidden');
+            }
+
             let emailRevealed = false;
     
             function revealEmail(btn) {
@@ -413,14 +433,3 @@
         </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
